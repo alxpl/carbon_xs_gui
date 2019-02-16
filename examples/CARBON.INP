@@ -1,4 +1,4 @@
-SCAN1.DAT                               
+crystalline_carbon.dat                               
    15.00  120.00 1.54180       1         Thmin   Thmax   Lambda  Nskip
       18      10       3       2         Npar    Nphi    Nsg     Nlayer
     .500 205.000   2.000  25.000   1.500 Rdens   L0      Wd      Ww      Bw
