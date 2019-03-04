@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from PySide import QtGui, QtCore
 import ujson
 import sys
@@ -17,11 +19,12 @@ import appdirs
 from scalable_mw import Ui_MainWindow
 
 from text_file_viewer import Ui_Dialog
+from six.moves import zip
 
 use_pyside = qt_compat.QT_API == qt_compat.QT_API_PYSIDE
 
 if hasattr(sys, 'frozen') and sys.platform == 'darwin':
-    print "Detected a frozen application and extracting the appropriate file directory format"
+    print("Detected a frozen application and extracting the appropriate file directory format")
     base_directory = os.path.join(os.path.dirname(sys.executable))
 else:
     base_directory = '.'
@@ -304,8 +307,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         """
 
-        print "Running first time app data setup."
-        print "Creating data directory in %s"%user_data_directory
+        print("Running first time app data setup.")
+        print("Creating data directory in %s"%user_data_directory)
         if not os.path.exists(user_data_directory):
             os.makedirs(user_data_directory)
         if not os.path.exists(os.path.join(user_data_directory, "config")):
@@ -350,9 +353,9 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         try:
             self.read_carboninp(os.path.join(base_directory, 'carbonxs', 'carbon.inp'))
 
-            print "Loaded most recently used parameters successfully from 'carbonxs' directory."
+            print("Loaded most recently used parameters successfully from 'carbonxs' directory.")
         except IOError:
-            print "No previous parameters found in 'carbonxs' directory."
+            print("No previous parameters found in 'carbonxs' directory.")
 
         # Clears any SCAN.DAT file already in carbonxs directory
         if 'SCAN.DAT' in os.listdir(os.path.join(base_directory, 'carbonxs')):
@@ -366,31 +369,31 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             try:
                 self.lock_y_axis.setChecked(config['program_config']['lock_y'])
             except KeyError:
-                print "No configuration found for Y Axis Lock in config.json. Setting to default of False."
+                print("No configuration found for Y Axis Lock in config.json. Setting to default of False.")
                 self.lock_y_axis.setChecked(False)
 
             try:
                 self.lock_x_axis.setChecked(config['program_config']['lock_x'])
             except KeyError:
-                print "No configuration found for X Axis Lock in config.json. Setting to default of False."
+                print("No configuration found for X Axis Lock in config.json. Setting to default of False.")
                 self.lock_x_axis.setChecked(False)
 
             try:
                 self.show_previous.setChecked(config['program_config']['show_previous_fit'])
             except KeyError:
-                print "No configuration found for Show Previous in config.json. Setting to default of False."
+                print("No configuration found for Show Previous in config.json. Setting to default of False.")
                 self.show_previous.setChecked(False)
 
             try:
                 self.last_separator_used = config['program_config']['last_separator']
             except KeyError:
-                print "No configuration found for Last Separator Type used. Defaulting to Whitespace"
+                print("No configuration found for Last Separator Type used. Defaulting to Whitespace")
                 self.last_separator_used = 0
 
             try:
                 self.last_header_lines_used = config['program_config']['last_header_lines']
             except KeyError:
-                print "No configuration found for Last Number of Header Lines used. Defaulting to 0 Header Lines"
+                print("No configuration found for Last Number of Header Lines used. Defaulting to 0 Header Lines")
                 self.last_header_lines_used = 0
 
             # Loads file directory defaults from configuration file
@@ -398,58 +401,58 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             try:
                 self.default_diff_data_dir = config['file_defaults']['diff_data_dir']
             except KeyError:
-                print "No configuration found for default diffraction data directory. Using default directory."
+                print("No configuration found for default diffraction data directory. Using default directory.")
                 self.default_diff_data_dir = None
 
             try:
                 self.default_export_dir = config['file_defaults']['export_dir']
             except KeyError:
-                print "No configuration found for default export data directory. Using default directory."
+                print("No configuration found for default export data directory. Using default directory.")
                 self.default_export_dir = None
 
             try:
                 self.default_carboninp_export_dir = config['file_defaults']['export_carboninp']
             except KeyError:
-                print "No configuration found for default carbon.inp export directory. Using default directory."
+                print("No configuration found for default carbon.inp export directory. Using default directory.")
                 self.default_carboninp_export_dir = None
             try:
                 self.default_carboninp_import_dir = config['file_defaults']['import_carboninp']
             except KeyError:
-                print "No configuration found for default carbon.inp import directory. Using default directory."
+                print("No configuration found for default carbon.inp import directory. Using default directory.")
                 self.default_carboninp_import_dir = None
 
 
             try:
                 self.default_fitparams_export_dir = config['file_defaults']['export_fitparams']
             except KeyError:
-                print "No configuration found for default fit parameters export directory. Using default directory."
+                print("No configuration found for default fit parameters export directory. Using default directory.")
                 self.default_fitparams_export_dir = None
             try:
                 self.default_fitparams_import_dir = config['file_defaults']['import_fitparams']
             except KeyError:
-                print "No configuration found for default fit parameters import directory. Using default directory."
+                print("No configuration found for default fit parameters import directory. Using default directory.")
                 self.default_fitparams_import_dir = None
 
             try:
                 self.default_fitsettings_export_dir = config['file_defaults']['export_fitsettings']
             except KeyError:
-                print "No configuration found for default fit settings export directory. Using default directory."
+                print("No configuration found for default fit settings export directory. Using default directory.")
                 self.default_fitsettings_export_dir = None
             try:
                 self.default_fitsettings_import_dir = config['file_defaults']['import_fitsettings']
             except KeyError:
-                print "No configuration found for default fit settings import directory. Using default directory."
+                print("No configuration found for default fit settings import directory. Using default directory.")
                 self.default_fitsettings_import_dir = None
 
             try:
                 self.default_diffsettings_export_dir = config['file_defaults']['export_diffsettings']
             except KeyError:
-                print "No configuration found for default diffractometer settings export directory. Using default directory."
+                print("No configuration found for default diffractometer settings export directory. Using default directory.")
                 self.default_diffsettings_export_dir = None
             try:
                 self.default_diffsettings_import_dir = config['file_defaults']['import_diffsettings']
             except KeyError:
-                print "No configuration found for default diffractometer settings import directory. Using default directory."
+                print("No configuration found for default diffractometer settings import directory. Using default directory.")
                 self.default_diffsettings_import_dir = None
 
 
@@ -470,10 +473,10 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         if self.number_layers.currentIndex() == 0:
             self.param_label_15.setText('g, Fraction of Low Strain Carbon')
-            print "Currently using 1 layer model - Parameter 15 is g, Fraction of Low Strain Carbon."
+            print("Currently using 1 layer model - Parameter 15 is g, Fraction of Low Strain Carbon.")
         else:
             self.param_label_15.setText('Pt, Probability of 3R Stacking')
-            print "Currently using 2 layer model - Parameter 15 is Pt, Probability of 3R Stacking."
+            print("Currently using 2 layer model - Parameter 15 is Pt, Probability of 3R Stacking.")
 
 
     def init_menubar_osx(self):
@@ -913,7 +916,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             if full_path.endswith('.mdi'):
 
                 try:
-                    print "Attempting to load MDI file: %s"%full_path
+                    print("Attempting to load MDI file: %s"%full_path)
                     self.x_data, self.y_data = data_io.read_mdi_file(full_path)
 
 
@@ -922,8 +925,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                     self.default_diff_data_dir = directory
 
                 except ValueError:
-                    print "Error: Improperly formatted pattern file in file %s."%full_path
-                    print "The pattern file should conform to the JADE MDI format."
+                    print("Error: Improperly formatted pattern file in file %s."%full_path)
+                    print("The pattern file should conform to the JADE MDI format.")
 
 
                     self.current_filename = previous_filename
@@ -933,15 +936,15 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             elif full_path.endswith('.ras'):
 
                 try:
-                    print "Attempting to load RAS file: %s"%full_path
+                    print("Attempting to load RAS file: %s"%full_path)
                     self.x_data, self.y_data = data_io.read_ras_file(full_path)
 
                     self.current_filename = filename
                     self.default_diff_data_dir = directory
 
                 except ValueError:
-                    print "Error: Improperly formatted pattern file in file %s."%full_path
-                    print "The pattern file should conform to the RAS format."
+                    print("Error: Improperly formatted pattern file in file %s."%full_path)
+                    print("The pattern file should conform to the RAS format.")
 
                     self.current_filename = previous_filename
                     return
@@ -966,7 +969,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                         separator = None
 
                     else:
-                        print "Some other separator not currently implemented is selected"
+                        print("Some other separator not currently implemented is selected")
 
 
 
@@ -976,8 +979,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                     return
 
                 if header_lines:
-                    print "Skipping first %d lines as header."%header_lines
-                print "Attempting to load data from text file: %s"%full_path
+                    print("Skipping first %d lines as header."%header_lines)
+                print("Attempting to load data from text file: %s"%full_path)
 
                 try:
                     if separator:
@@ -996,8 +999,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                     self.default_diff_data_dir = directory
 
                 except ValueError:
-                    print "Error: loading data from %s"%full_path
-                    print "Please check that the number of header lines and the separator is correct."
+                    print("Error: loading data from %s"%full_path)
+                    print("Please check that the number of header lines and the separator is correct.")
 
                     self.current_filename = previous_filename
                     return
@@ -1030,11 +1033,11 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                         self.y_data = self.y_data[0::divisor]
 
                         new_length = len(self.x_data)
-                        print "Data reduced from %d data points to %s data points by taking every %s point."%(data_pts, new_length, divisor_str)
+                        print("Data reduced from %d data points to %s data points by taking every %s point."%(data_pts, new_length, divisor_str))
 
                     else:
 
-                        print "Warning: CarbonXS cannot process datasets larger than 3000 data points and will not fit the full pattern."
+                        print("Warning: CarbonXS cannot process datasets larger than 3000 data points and will not fit the full pattern.")
 
             self.plot_loaded_data()
 
@@ -1196,7 +1199,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
             ujson.dump(diffractometer_settings, data_file, indent = 4)
 
-            print 'Exported Diffractometer Settings to: %s'%fname
+            print('Exported Diffractometer Settings to: %s'%fname)
             self.statusBar().showMessage('Exported Diffractometer Settings to: %s'%fname)
 
 
@@ -1235,18 +1238,18 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 self.sample_density.setValue(diffractometer_settings['sample_density'])
                 self.goniometer_radius.setValue(diffractometer_settings['gonio_radius'])
 
-                print 'Imported Diffractometer Settings from: %s'%fname
+                print('Imported Diffractometer Settings from: %s'%fname)
 
                 self.statusBar().showMessage('Imported Diffractometer Settings from: %s'%fname)
 
             except ValueError:
-                print "Error in loading JSON file: %s."%(fname)
-                print "Verify that the configuration file is properly formatted."
+                print("Error in loading JSON file: %s."%(fname))
+                print("Verify that the configuration file is properly formatted.")
 
             except KeyError:
                 import_type = 'diffractometer settings'
-                print 'Error in importing %s from: %s.'%(import_type, fname)
-                print 'Verify that this settings file is the right kind for this import.'
+                print('Error in importing %s from: %s.'%(import_type, fname))
+                print('Verify that this settings file is the right kind for this import.')
 
 
     def export_fitting_params(self):
@@ -1285,7 +1288,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
             ujson.dump(fitting_params, data_file, indent = 4)
 
-            print 'Exported Fitting Parameters to: %s'%fname
+            print('Exported Fitting Parameters to: %s'%fname)
             self.statusBar().showMessage('Exported Fitting Parameters to: %s'%fname)
 
     def import_fitting_params(self):
@@ -1323,16 +1326,16 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
                         # Handle possibility that the
-                        if "g, Fraction of Low Strain Carbon" in fitting_params.keys():
+                        if "g, Fraction of Low Strain Carbon" in list(fitting_params.keys()):
                             param_value, enabled = fitting_params["g, Fraction of Low Strain Carbon"]
 
 
 
-                        elif "Pt, Probability of 3R Stacking" in fitting_params.keys():
+                        elif "Pt, Probability of 3R Stacking" in list(fitting_params.keys()):
                             param_value, enabled = fitting_params["Pt, Probability of 3R Stacking"]
 
                         else:
-                            print "Could not find parameter 15"
+                            print("Could not find parameter 15")
                             param_value = 0
                             enabled = False
 
@@ -1346,32 +1349,32 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
 
-                print 'Imported Fitting Parameters from: %s'%fname
+                print('Imported Fitting Parameters from: %s'%fname)
                 self.statusBar().showMessage('Imported Fitting Parameters from: %s'%fname)
                 errors, warnings = self.check_fitting_parameters()
 
 
                 # Check if the 1-layer model or 2 layer model encoded into the fitting params JSON file
                 # is consistent with currently loaded system
-                if 'number_layers' in fitting_params.keys():
+                if 'number_layers' in list(fitting_params.keys()):
 
                     if self.number_layers.currentIndex() != fitting_params['number_layers']-1:
-                        print "Warning: Parameters loaded from a %d layer model system. Current model is a %d layer model."%(fitting_params['number_layers'],
-                                                                                                                             self.number_layers.currentIndex()+1)
+                        print("Warning: Parameters loaded from a %d layer model system. Current model is a %d layer model."%(fitting_params['number_layers'],
+                                                                                                                             self.number_layers.currentIndex()+1))
                         warnings += 1
                 
                 if errors+warnings > 0:
-                    print "Found %d errors and %d warnings. Please ensure parameters are physically meaningful."%(errors, warnings)
+                    print("Found %d errors and %d warnings. Please ensure parameters are physically meaningful."%(errors, warnings))
 
 
             except ValueError:
-                print "Error in loading JSON file: %s."%(fname)
-                print "Verify that the configuration file is properly formatted."
+                print("Error in loading JSON file: %s."%(fname))
+                print("Verify that the configuration file is properly formatted.")
 
             except KeyError:
                 import_type = 'fitting parameters'
-                print 'Error in importing %s from: %s.'%(import_type, fname)
-                print 'Verify that this settings file is the right kind for this import.'
+                print('Error in importing %s from: %s.'%(import_type, fname))
+                print('Verify that this settings file is the right kind for this import.')
 
     def export_fitting_settings(self):
 
@@ -1418,7 +1421,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             fitting_settings['gc_delta']  = 0
             ujson.dump(fitting_settings, data_file, indent = 4)
 
-            print 'Exported Fitting Settings to: %s'%fname
+            print('Exported Fitting Settings to: %s'%fname)
             self.statusBar().showMessage('Exported Fitting Settings to: %s'%fname)
 
     def import_fitting_settings(self):
@@ -1460,25 +1463,25 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 elif fitting_settings['layers'] == 2:
                     self.number_layers.setCurrentIndex(1)
                 else:
-                    print "Error: Number of layers is not 1 or 2. Setting it to 1."
+                    print("Error: Number of layers is not 1 or 2. Setting it to 1.")
                     self.number_layers.setCurrentIndex(0)
 
                 self.n_phi.setValue(fitting_settings['nphi'])
                 self.n_sg.setValue(fitting_settings['nsg'])
                 self.epsilon.setValue(fitting_settings['epsilon'])
 
-                print 'Imported Fitting Settings from: %s'%fname
+                print('Imported Fitting Settings from: %s'%fname)
                 self.statusBar().showMessage('Imported Fitting Settings to: %s'%fname)
 
 
             except ValueError:
-                print "Error in loading JSON file: %s."%(fname)
-                print "Verify that the configuration file is properly formatted."
+                print("Error in loading JSON file: %s."%(fname))
+                print("Verify that the configuration file is properly formatted.")
 
             except KeyError:
                 import_type = 'fitting settings'
-                print 'Error in importing %s from: %s.'%(import_type, fname)
-                print 'Verify that this settings file is the right kind for this import.'
+                print('Error in importing %s from: %s.'%(import_type, fname))
+                print('Verify that this settings file is the right kind for this import.')
 
 
     def export_to_carboninp(self):
@@ -1501,7 +1504,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.write_carboninp(fname)
             self.default_carboninp_export_dir, _ = os.path.split(fname)
 
-            print 'Exported in CARBON.INP format to: %s'%fname
+            print('Exported in CARBON.INP format to: %s'%fname)
             self.statusBar().showMessage('Exported in CARBON.INP format to: %s'%fname)
 
     def write_carboninp(self, destination, disable_fit = False):
@@ -1592,7 +1595,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.read_carboninp(fname)
             self.default_carboninp_import_dir, _ = os.path.split(fname)
 
-            print 'Imported CARBON.INP parameters from: %s' % fname
+            print('Imported CARBON.INP parameters from: %s' % fname)
             self.statusBar().showMessage('Imported CARBON.INP parameters from: %s' % fname)
 
     def read_carboninp(self, filename):
@@ -1627,7 +1630,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         elif int(data_elements_2[3]) == 2:
             self.number_layers.setCurrentIndex(1)
         else:
-            print "Number of layers is not 1 or 2. Setting to 1"
+            print("Number of layers is not 1 or 2. Setting to 1")
             self.number_layers.setCurrentIndex(0)
 
         # Diffractometer Parameters
@@ -1650,8 +1653,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             config_elements = line.split()
 
             if "*" in config_elements[0]:
-                print "Warning: Bad parameter found in "+self.parameter_labels[index].text()
-                print "Setting parameter value to 0"
+                print("Warning: Bad parameter found in "+self.parameter_labels[index].text())
+                print("Setting parameter value to 0")
                 param_value = 0
             else:
 
@@ -1667,7 +1670,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         errors, warnings = self.check_fitting_parameters()
         if errors+warnings > 0:
-            print "Found %d errors and %d warnings. Please ensure parameters are physically meaningful."%(errors, warnings)
+            print("Found %d errors and %d warnings. Please ensure parameters are physically meaningful."%(errors, warnings))
 
     def write_scan_data(self, output_file):
         """
@@ -1696,17 +1699,17 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         errors = 0
 
         if self.iterations.value() < 1 and fit_mode:
-            print "Number of iterations is less than 1. No fitting will be performed."
-            print "Use Fitting -> Calculate Pattern to perform pattern calculation."
+            print("Number of iterations is less than 1. No fitting will be performed.")
+            print("Use Fitting -> Calculate Pattern to perform pattern calculation.")
             errors += 1
 
         if not any([enable.isChecked() for enable in self.parameter_enable_list]) and fit_mode:
-            print "Error: No fitting parameters are enabled."
+            print("Error: No fitting parameters are enabled.")
             errors +=1
 
 
         if self.sample_density.value() > 1.0 or self.sample_density.value() < 0.0:
-            print "Sample Density must be between 0 and 1"
+            print("Sample Density must be between 0 and 1")
             errors += 1
 
 
@@ -1715,10 +1718,10 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         errors += fit_errors
 
         if errors > 0:
-            print "Found %d errors and %d warnings. Aborting."%(errors, warnings)
+            print("Found %d errors and %d warnings. Aborting."%(errors, warnings))
             return False
         else:
-            print "Parameter check passed with 0 errors and %d warnings. Proceeding with fit."%warnings
+            print("Parameter check passed with 0 errors and %d warnings. Proceeding with fit."%warnings)
             return True
 
 
@@ -1729,54 +1732,54 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         :return:
         """
 
-        print "Performing checks on fitting parameters."
+        print("Performing checks on fitting parameters.")
 
         errors = 0
         warnings = 0
 
         if not any([fit_parameter.value() for fit_parameter in self.parameter_list]):
-            print "ERROR: No non-zero fitting parameters have been set. Please input an initial set of parameters"
+            print("ERROR: No non-zero fitting parameters have been set. Please input an initial set of parameters")
             errors += 1
 
 
         if not any([self.fit_settings[key].value() for key in self.fit_settings.keys() if key != 'number_layers']):
-            print "ERROR: No non-zero fit settings have been set. Please input a set of fit settings."
+            print("ERROR: No non-zero fit settings have been set. Please input a set of fit settings.")
             errors += 1
 
         if not any([diff_setting.value() for diff_setting in self.diff_settings]):
-            print "ERROR: No non-zero diffractometer settings have been set. Please input a set of diffractometer settings."
+            print("ERROR: No non-zero diffractometer settings have been set. Please input a set of diffractometer settings.")
             errors += 1
 
         if self.param_07.value() < 0:
-            print "ERROR: A (In place cell constant) must be greater than 0."
+            print("ERROR: A (In place cell constant) must be greater than 0.")
             errors += 1
         if self.param_08.value() < 0:
-            print "ERROR: d002 (Interlayer Spacing) must be greater than 0."
+            print("ERROR: d002 (Interlayer Spacing) must be greater than 0.")
             errors += 1
         if self.param_09.value() < 0:
-            print "ERROR: La (Coherence Length) must be greater than 0."
+            print("ERROR: La (Coherence Length) must be greater than 0.")
             errors += 1
         if self.param_10.value() < 0:
-            print "ERROR: M (Number of Layers) must be greater than 0."
+            print("ERROR: M (Number of Layers) must be greater than 0.")
             errors += 1
 
         if self.param_12.value() < 0:
-            print "ERROR: Dab (In plane strain) must be greater than 0."
+            print("ERROR: Dab (In plane strain) must be greater than 0.")
             errors += 1
         if self.param_13.value() < 0:
-            print "ERROR: Del (Interplanar strain) must be greater than 0."
+            print("ERROR: Del (Interplanar strain) must be greater than 0.")
             errors += 1
         if self.param_14.value() > 1 or  self.param_14.value() < 0:
-            print "ERROR: Pr must be between 0 and 1."
+            print("ERROR: Pr must be between 0 and 1.")
             errors += 1
         if self.param_15.value() > 1 or  self.param_15.value() < 0:
-            print "ERROR: g (1 layer model) or Pt (2 layer model) must be between 0 and 1."
+            print("ERROR: g (1 layer model) or Pt (2 layer model) must be between 0 and 1.")
             errors += 1
         if self.param_16.value() < 0:
-            print "Warning: Debye Waller Temperature factor is less than 0."
+            print("Warning: Debye Waller Temperature factor is less than 0.")
             warnings += 1
         if self.param_17.value() < 0:
-            print "Warning: Preferential Orientation Factor is less than 0."
+            print("Warning: Preferential Orientation Factor is less than 0.")
             warnings += 1
 
         return errors, warnings
@@ -1790,7 +1793,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         # Verifies that XRD pattern data has been loaded
         if len(self.x_data) > 0 and len(self.y_data) > 0:
-            print "Beginning fitting process."
+            print("Beginning fitting process.")
 
             # If all sanity checks pass, proceed with fit
             if self.pre_run_sanity_check(True):
@@ -1808,7 +1811,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 self.open_pattern()
                 # If a pattern has been loaded, proceeed with fit.
                 if len(self.x_data) > 0 and len(self.y_data) > 0 and self.pre_run_sanity_check(True):
-                    print "Loaded an XRD pattern"
+                    print("Loaded an XRD pattern")
                     self.call_fit_program()
 
     def call_fit_program(self):
@@ -1819,26 +1822,26 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         os.chdir(os.path.join(base_directory, 'carbonxs'))
 
-        print "Writing carbon.inp to the carbonxs directory."
+        print("Writing carbon.inp to the carbonxs directory.")
 
         self.write_carboninp("carbon.inp")
 
-        print "Writing SCAN.DAT to the carbonxs directory."
+        print("Writing SCAN.DAT to the carbonxs directory.")
 
         self.write_scan_data("SCAN.DAT")
         self.pattern_calc_flag = False
         self.append_to_buffer = True
 
-        print "Calling CarbonXS."
+        print("Calling CarbonXS.")
 
         if "win32" in sys.platform:
-            print "Windows detected - calling carbonxs_gfortran.exe"
+            print("Windows detected - calling carbonxs_gfortran.exe")
             self.fitting_process.start('carbonxs_gfortran.exe')
         elif 'linux' in sys.platform or 'darwin' in sys.platform:
-            print "Linux/OSX detected - calling carbonxs_app"
+            print("Linux/OSX detected - calling carbonxs_app")
             self.fitting_process.start('./carbonxs_app')
         else:
-            print "WARNING UNSUPPORTED PLATFORM"
+            print("WARNING UNSUPPORTED PLATFORM")
 
         # Sets menu flags to disable start of another process and enable aborting fit process
         self.menu_start_fit.setEnabled(False)
@@ -1860,11 +1863,11 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         if self.pre_run_sanity_check(False):
             self.append_to_buffer = append_to_buffer
-            print "Beginning pattern calculation process."
+            print("Beginning pattern calculation process.")
             os.chdir(os.path.join(base_directory, 'carbonxs'))
-            print "Wrote carbon.inp to the carbonxs directory."
+            print("Wrote carbon.inp to the carbonxs directory.")
             self.write_carboninp("carbon.inp", disable_fit=True)
-            print "Calling CarbonXS."
+            print("Calling CarbonXS.")
             self.pattern_calc_flag = True
             self.menu_start_fit.setEnabled(False)
             self.menu_calculate_pattern.setEnabled(False)
@@ -1872,13 +1875,13 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.fit_pattern_button.setEnabled(False)
 
             if "win32" in sys.platform:
-                print "Windows detected - calling carbonxs_gfortran.exe"
+                print("Windows detected - calling carbonxs_gfortran.exe")
                 self.fitting_process.start('carbonxs_gfortran.exe')
             elif 'linux' in sys.platform or 'darwin' in sys.platform:
-                print "Linux/OSX detected - calling carbonxs_app"
+                print("Linux/OSX detected - calling carbonxs_app")
                 self.fitting_process.start('./carbonxs_app')
             else:
-                print "WARNING UNSUPPORTED PLATFORM"
+                print("WARNING UNSUPPORTED PLATFORM")
 
             self.menu_abort_fit.setEnabled(True)
             self.abort_fit_button.setEnabled(True)
@@ -1910,13 +1913,13 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         if not self.abort_flag:
 
-            print "CarbonXS Process Complete"
+            print("CarbonXS Process Complete")
 
             # Exit Code 0 indicates successful completion
             if self.fitting_process.exitCode() == 0:
 
                 if not self.pattern_calc_flag:
-                    print "Reading new carbon.inp data and plotting new data"
+                    print("Reading new carbon.inp data and plotting new data")
                     self.read_carboninp(os.path.join(base_directory, 'carbonxs', 'carbon.inp'))
 
 
@@ -1948,9 +1951,9 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             # Exit Code 1 indicates a crash in CarbonXS
             # Do NOT load any settings the program wrote
             elif self.fitting_process.exitCode() == 1:
-                print "Error: Fit failed due to crash in CarbonXS"
+                print("Error: Fit failed due to crash in CarbonXS")
             else:
-                print "Other error occurred"
+                print("Other error occurred")
 
             # Re-enable buttons to start process and disable buttons that abort process
             self.menu_abort_fit.setEnabled(False)
@@ -1963,7 +1966,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
         else:
-            print "\n\n Fitting process aborted"
+            print("\n\n Fitting process aborted")
 
             self.abort_flag = False
 
@@ -1994,7 +1997,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if fname:
 
             if fname.endswith('.mdi'):
-                print "Exporting fit results to Jade MDI Format"
+                print("Exporting fit results to Jade MDI Format")
 
                 directory, _ = os.path.split(fname)
 
@@ -2021,16 +2024,16 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
                                 self.default_export_dir = directory
                                 shutil.copy(os.path.join(base_directory, 'carbonxs', data_file), fname + export_suffix)
-                                print "Copied %s file to %s. (Overwrote old file)" % (data_file, destination)
+                                print("Copied %s file to %s. (Overwrote old file)" % (data_file, destination))
                             else:
-                                print "%s already exists. Did not overwrite." % destination
+                                print("%s already exists. Did not overwrite." % destination)
 
                         else:
 
                             self.default_export_dir =directory
 
                             shutil.copy(os.path.join(base_directory, 'carbonxs', data_file), destination)
-                            print "Copied %s file to %s" %(data_file, destination)
+                            print("Copied %s file to %s" %(data_file, destination))
 
 
 
@@ -2052,7 +2055,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.calculate_pattern(append_to_buffer=False)
             self.check_undo_index()
         else:
-            print "Cannot go further back"
+            print("Cannot go further back")
 
     def go_forward(self):
         """
@@ -2070,7 +2073,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.calculate_pattern(append_to_buffer=False)
             self.check_undo_index()
         else:
-            print "Cannot go further forward"
+            print("Cannot go further forward")
 
     def update_from_buffer(self, load_params):
         """
@@ -2143,7 +2146,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     #
 
     def closeEvent(self, event):
-        print "Closing program"
+        print("Closing program")
         self.write_config()
 
 
@@ -2172,24 +2175,24 @@ def main():
 if __name__ == '__main__':
 
     # Check if carbon program is present
-    print "Checking if programs are available"
+    print("Checking if programs are available")
 
     if  'darwin' in sys.platform or 'linux' in sys.platform:
         if 'carbonxs_app' not in os.listdir(os.path.join(base_directory, 'carbonxs')):
-            print "ERROR: carbonxs_app is not present in the carbonxs directory"
-            print "This indicates that a version of the carbonxs program has not yet been compiled"
-            print "Please compile (see compiling.txt) the Fortran program using GCC."
-            print "Alternately, run compile.sh"
+            print("ERROR: carbonxs_app is not present in the carbonxs directory")
+            print("This indicates that a version of the carbonxs program has not yet been compiled")
+            print("Please compile (see compiling.txt) the Fortran program using GCC.")
+            print("Alternately, run compile.sh")
             sys.exit()
         else:
-            print "Found CarbonXS!"
+            print("Found CarbonXS!")
 
 
     elif 'win32' in sys.platform:
         if 'carbonxs_gfortran.exe' not in os.listdir(os.path.join(base_directory, 'carbonxs')):
-            print "ERROR! carbonxs_gfortran.exe is not in the carbonxs directory"
-            print "Please make sure this program has been correctly extracted."
+            print("ERROR! carbonxs_gfortran.exe is not in the carbonxs directory")
+            print("Please make sure this program has been correctly extracted.")
             sys.exit()
         else:
-            print "Found CarbonXS!"
+            print("Found CarbonXS!")
     main()
